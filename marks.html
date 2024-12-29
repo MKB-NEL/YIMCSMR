@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIVIA-Scoreboard</title>
+    <link rel="icon" href="yim1.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #back-button {
+            background-color: #007BFF; /* Blue color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #back-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        #search-bar {
+            width: 60%;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        table {
+            width: 60%; /* Adjusted width */
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <button id="back-button">BACK</button>
+    <h1>Scoreboard</h1>
+    <input type="text" id="search-bar" placeholder="Search by email...">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th id="marks-header">Marks</th>
+            </tr>
+        </thead>
+        <tbody id="scoreboard">
+            <!-- Scores will be populated here -->
+        </tbody>
+    </table>
+    <!-- Include Firebase SDKs from CDN as modules -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, onValue, update, onDisconnect } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQqpGVRQrX4mm-MJKvPNEVhxyVQ-emQ1k",
+            authDomain: "yimcsmr-b8fd2.firebaseapp.com",
+            databaseURL: "https://yimcsmr-b8fd2-default-rtdb.firebaseio.com",
+            projectId: "yimcsmr-b8fd2",
+            storageBucket: "yimcsmr-b8fd2.firebasestorage.app",
+            messagingSenderId: "4236095136",
+            appId: "1:4236095136:web:5934e46998a919a04f23c5",
+            measurementId: "G-DLDCTJYEHC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Function to fetch scores
+        async function fetchScores() {
+            const scoresRef = ref(database, 'MARKS'); // Adjust the path as necessary
+            onValue(scoresRef, (snapshot) => {
+                const scoresData = snapshot.val();
+                console.log("Scores Data:", scoresData); // Log the scores data
+                const scoreboard = document.getElementById('scoreboard');
+                scoreboard.innerHTML = ''; // Clear previous data
+
+                if (scoresData) {
+                    const scoresArray = [];
+                    for (const email in scoresData) {
+                        scoresArray.push({ email: email, marks: scoresData[email].marks });
+                    }
+                    // Sort the scoresArray by marks in descending order
+                    scoresArray.sort((a, b) => b.marks - a.marks);
+
+                    // Populate the table
+                    scoresArray.forEach(({ email, marks }) => {
+                        console.log(`Email: ${email}, Marks: ${marks}`); // Log each entry
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${email}</td><td>${marks}</td>`;
+                        scoreboard.appendChild(row);
+                    });
+                } else {
+                    console.log("No scores found.");
+                }
+            });
+        }
+
+        // Function to filter the table based on search input
+        function filterTable() {
+            const searchInput = document.getElementById('search-bar').value.toLowerCase();
+            const rows = document.getElementById('scoreboard').getElementsByTagName('tr');
+            for (const row of rows) {
+                const emailCell = row.getElementsByTagName('td')[0];
+                if (emailCell) {
+                    const email = emailCell.textContent || emailCell.innerText;
+                    row.style.display = email.toLowerCase().includes(searchInput) ? '' : 'none';
+                }
+            }
+        }
+
+        // Add event listener for search input
+        document.getElementById('search-bar').addEventListener('input', filterTable);
+
+        // Add event listener for back button
+        document.getElementById('back-button').addEventListener('click', () => {
+            window.location.href = 'trivia.html';
+        });
+
+        // Call the fetchScores function when the page loads
+        window.onload = fetchScores;
+
+        // Function to update user status in Realtime Database
+        function updateStatus(email, isActive) {
+            const userStatusRef = ref(database, `status/${email.replace('@', '_').replace('.', '_')}`);
+            update(userStatusRef, {
+                active: isActive
+            });
+        }
+
+        // Get email from local storage and set user as active on load
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            console.log("Email found in local storage:", userEmail);
+            
+            // Set user as active on load
+            updateStatus(userEmail, true);
+
+            // Set user as inactive on disconnect
+            const userStatusRef = ref(database, `status/${userEmail.replace('@', '_').replace('.', '_')}`);
+            onDisconnect(userStatusRef).update({
+                active: false
+            });
+        } else {
+            console.log("No user email found in local storage.");
+        }
+
+        // Set user as inactive when the window is closed or refreshed
+        window.addEventListener('beforeunload', () => {
+            if (userEmail) {
+                updateStatus(userEmail, false);
+            }
+        });
+    </script>
+</body>
+</html>

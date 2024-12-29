@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YIMCSMR-REGISTRATION</title>
+  <link rel="icon" href="yim1.png" type="image/x-icon">
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .form-container {
+      position: relative;
+      width: 350px;
+      height: 550px; /* Increased height to accommodate new input */
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+
+    .form-box {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+      transition: transform 0.6s ease;
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s ease;
+    }
+
+    input::placeholder {
+      font-style: italic;
+    }
+
+    input:focus {
+      border-color: #28a745; /* Green focus color */
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745; /* Green button */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #218838; /* Darker green on hover */
+    }
+
+    .switch-form {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .switch-form a {
+      color: #28a745;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hidden {
+      transform: translateX(100%);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 20px;
+    }
+
+    .footer p {
+      color: #666;
+    }
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #28a745;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+      }
+
+      .form-container {
+        width: 100%;
+        padding: 20px;
+        height: auto;
+      }
+
+      .form-box {
+        padding: 30px;
+      }
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Loading Spinner -->
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Header with Image and Text outside the box -->
+    <div class="header">
+      <img src="yim1.png" alt="YIM Logo" />
+      <h1>YIM-CSMR</h1>
+    </div>
+
+    <div class="form-container">
+      <!-- Sign In Form -->
+      <div class="form-box sign-in-box">
+        <h2>Sign In</h2>
+        <form id="sign-in-form">
+          <input type="email" id="sign-in-email" placeholder="Email" required />
+          <input type="password" id="sign-in-password" placeholder="Password" required />
+          <input type="text" id="sign-in-code" placeholder="IN CODE(purchase it before you sign in.)" required />
+          <button type="submit">Sign In</button>
+          <div class="message" id="sign-in-message"></div>
+        </form>
+        <p class="switch-form">Don't have an account? <a href="#" class="toggle-form">Sign Up</a></p>
+        <div class="footer">
+          <p>Made by btem</p>
+        </div>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div class="form-box sign-up-box hidden">
+        <h2>Sign Up</h2>
+        <form id="sign-up-form">
+          <input type="text" id="sign-up-name" placeholder="Full Name" required />
+          <input type="email" id="sign-up-email" placeholder="Email" required />
+          <input type="password" id="sign-up-password" placeholder="Password" required />
+          <input type="text" id="sign-up-code" placeholder="IN CODE(purchase it before you sign up.)" required />
+          <button type="submit">Sign Up</button>
+          <div class="message" id="sign-up-message"></div>
+        </form>
+        <p class="switch-form">Already have an account? <a href="#" class="toggle-form">Sign In</a></p>
+        <div class="footer">
+          <p>Made by btem</p>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+     // Toggle between Sign In and Sign Up
+     const toggleFormLinks = document.querySelectorAll('.toggle-form');
+    const signInBox = document.querySelector('.sign-in-box');
+    const signUpBox = document.querySelector('.sign-up-box');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+
+    toggleFormLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        signInBox.classList.toggle('hidden');
+        signUpBox.classList.toggle('hidden');
+      });
+    });
+    </script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQqpGVRQrX4mm-MJKvPNEVhxyVQ-emQ1k",
+      authDomain: "yimcsmr-b8fd2.firebaseapp.com",
+      projectId: "yimcsmr-b8fd2",
+      storageBucket: "yimcsmr-b8fd2.firebasestorage.app",
+      messagingSenderId: "4236095136",
+      appId: "1:4236095136:web:5934e46998a919a04f23c5",
+      measurementId: "G-DLDCTJYEHC"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Redirect to home.html if the user is already authenticated
+    if (localStorage.getItem('userEmail')) {
+      window.location.href = 'home.html';
+    }
+
+   
+
+    // Show loading spinner
+    function showLoadingSpinner() {
+      loadingOverlay.style.display = 'flex';
+    }
+
+    // Hide loading spinner
+    function hideLoadingSpinner() {
+      loadingOverlay.style.display = 'none';
+    }
+
+    // Check if the IN CODE is valid
+    async function isValidCode(code) {
+      try {
+        const codeDoc = await getDoc(doc(db, "IN CODE", code));
+        return codeDoc.exists();
+      } catch (error) {
+        console.error("Error checking code: ", error);
+        return false;
+      }
+    }
+
+    // Sign Up
+    document.getElementById('sign-up-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('sign-up-name').value;
+      const email = document.getElementById('sign-up-email').value;
+      const password = document.getElementById('sign-up-password').value;
+      const code = document.getElementById('sign-up-code').value;
+      const messageElement = document.getElementById('sign-up-message');
+
+      showLoadingSpinner();
+
+      if (!(await isValidCode(code))) {
+        messageElement.textContent = "Invalid code, purchase a valid code.";
+        hideLoadingSpinner();
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Store user data in Firestore using email as document ID
+        await setDoc(doc(db, "users", email), {
+          name: name,
+          email: email
+        });
+        // Save email to local storage
+        localStorage.setItem('userEmail', email);
+
+        // Redirect to home.html
+        window.location.href = "home.html";
+
+      } catch (error) {
+        messageElement.textContent = "Error during sign up: " + error.message;
+      } finally {
+        hideLoadingSpinner();
+      }
+    });
+
+    // Sign In
+    document.getElementById('sign-in-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('sign-in-email').value;
+      const password = document.getElementById('sign-in-password').value;
+      const code = document.getElementById('sign-in-code').value;
+      const messageElement = document.getElementById('sign-in-message');
+
+      showLoadingSpinner();
+
+      if (!(await isValidCode(code))) {
+        messageElement.textContent = "Invalid code, purchase a valid code.";
+        hideLoadingSpinner();
+        return;
+      }
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Save email to local storage
+        localStorage.setItem('userEmail', email);
+
+        // Redirect to home.html
+        window.location.href = "home.html";
+
+      } catch (error) {
+        messageElement.textContent = "Error during sign in: " + error.message;
+      } finally {
+        hideLoadingSpinner();
+      }
+    });
+  </script>
+
+</body>
+</html>

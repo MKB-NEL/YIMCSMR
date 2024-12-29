@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YIMCSMR-View</title>
+    <link rel="icon" href="yim1.png" type="image/x-icon">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: azure;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 50px;
+            display: flex;
+            justify-content: space-around;
+            width: 95%;
+            padding: 15px;
+            background: rgba(0, 128, 0, 0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .navbar a svg {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 5px;
+        }
+
+        .navbar a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <h1>SESSION PENDING...</h1>
+    
+    <div class="navbar">
+        <a href="home.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" />
+            </svg>
+            Home
+        </a>
+        <a href="notes.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 21H15C15.55 21 16 20.55 16 20V7H8V20C8 20.55 8.45 21 9 21ZM10 2H14V4H10V2ZM6 7H18V20C18 21.1 17.1 22 16 22H8C6.9 22 6 21.1 6 20V7Z" />
+            </svg>
+            Notes
+        </a>
+        <a href="view.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4 4H20V20H4V4ZM6 6V18H18V6H6Z" />
+            </svg>
+            View
+        </a>
+        <a href="dashboard.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H13V15H11V17ZM11 13H13V7H11V13Z" />
+            </svg>
+            Dashboard
+        </a>
+        <a href="trivia.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H13V15H11V17ZM11 13H13V7H11V13Z" />
+            </svg>
+            Trivia
+        </a>
+        <a href="chat.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 6H4V18H20V6ZM22 4V20C22 21.1 21.1 22 20 22H4C2.9 22 2 21.1 2 20V4C2 2.9 2.9 2 4 2H20C21.1 2 22 2.9 22 4ZM6 14H18V16H6V14ZM6 10H18V12H6V10ZM6 6H18V8H6V6Z" />
+            </svg>
+            Chat
+        </a>
+    </div>
+</body>
+</html>

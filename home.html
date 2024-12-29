@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YIMCSMR-Home</title>
+    <link rel="icon" href="yim1.png" type="image/x-icon">
+    <style>
+        @font-face {
+            font-family: "Supernatural";
+            src: url("https://example.com/supernatural-font.woff") format("woff"); /* Replace with the actual URL of the font */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: scroll;
+        }
+
+        .profile {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-align: center;
+        }
+
+        .profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .profile p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .logout-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .header {
+            font-family: "Supernatural", Arial, sans-serif;
+            font-size: 2rem;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+            max-height: 100vh; /* Limit height to enable scrolling */
+            overflow-y: auto; /* Allow vertical scrolling */
+            margin-bottom: 100px; /* Leave space for the fixed navbar */
+            width: 100%;
+        }
+
+        .center-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .center-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .center-item p {
+            max-width: 300px;
+            font-size: 1rem;
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 50px;
+            display: flex;
+            justify-content: space-around;
+            width: 95%;
+            padding: 15px;
+            background: rgba(0, 128, 0, 0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .navbar a svg {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 5px;
+        }
+
+        .navbar a:hover {
+            color: #007BFF;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="profile">
+        <img src="https://i.pinimg.com/736x/87/cd/e6/87cde65225e9be9e05771fc5ebc86f5a.jpg" alt="Profile Picture">
+        <p id="username">@Nameoftheuser</p>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="header">YIM CSMR</div>
+
+    <div class="center-content">
+        <div class="center-item">
+            <p><b>Notes</b><br>You can read your members notes that may include quotes, tips, and more. You can also post your own notes for everyone to see.</p>
+            <img src="https://i.pinimg.com/736x/9c/e5/23/9ce523a9f93bf0c1e6fffa4fcb3d1c9f.jpg" alt="Center Image 1">
+        </div>
+        <div class="center-item">
+            <p><b>View</b><br>You can view photos posted by your members, like them, and even post your own images from life or work.</p>
+            <img src="https://i.pinimg.com/736x/20/54/ce/2054ce5e7e2c9630e5f6f955cb1cf55f.jpg" alt="Center Image 2">
+        </div>
+        <div class="center-item">
+            <p><b>Trivia</b><br>Play quiz games with your members, check the dashboard for your scores and position, and receive rewards in the future.</p>
+            <img src="https://i.pinimg.com/736x/c2/1a/83/c21a83552b99156b1b540b4e10207eab.jpg" alt="Center Image 3">
+        </div>
+        <div class="center-item">
+            <p><b>Chat</b><br>Chat on this website is not supported. Please use the WhatsApp group, but customer support is available on this site if needed.</p>
+            <img src="https://i.pinimg.com/736x/5e/81/ef/5e81efbaccd546255ae5d4c776620e57.jpg" alt="Center Image 4">
+        </div>
+    </div>
+
+    <div class="navbar">
+        <a href="home.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" />
+            </svg>
+            Home
+        </a>
+        <a href="notes.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 21H15C15.55 21 16 20.55 16 20V7H8V20C8 20.55 8.45 21 9 21ZM10 2H14V4H10V2ZM6 7H18V20C18 21.1 17.1 22 16 22H8C6.9 22 6 21.1 6 20V7Z" />
+            </svg>
+            Notes
+        </a>
+        <a href="view.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4 4H20V20H4V4ZM6 6V18H18V6H6Z" />
+            </svg>
+            View
+        </a>
+        <a href="dashboard.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H13V15H11V17ZM11 13H13V7H11V13Z" />
+            </svg>
+            Dashboard
+        </a>
+        <a href="trivia.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H13V15H11V17ZM11 13H13V7H11V13Z" />
+            </svg>
+            Trivia
+        </a>
+        <a href="chat.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 6H4V18H20V6ZM22 4V20C22 21.1 21.1 22 20 22H4C2.9 22 2 21.1 2 20V4C2 2.9 2.9 2 4 2H20C21.1 2 22 2.9 22 4ZM6 14H18V16H6V14ZM6 10H18V12H6V10ZM6 6H18V8H6V6Z" />
+            </svg>
+            Chat
+        </a>
+    </div>
+
+    <div class="footer-text">Made by btem | Visit Inzozi Med Web</div>
+
+    <script>
+        // Store the username in local storage
+        function storeUsername() {
+            const username = document.getElementById('username').textContent.replace('@', '');
+            localStorage.setItem('username', username);
+        }
+
+        // Call storeUsername function on any click on the document
+        document.addEventListener('click', storeUsername);
+
+        // Mock function to simulate logout
+        function logout() {
+            console.log("User signed out.");
+            // Clear local storage
+            localStorage.removeItem("userEmail");
+            // Redirect to index page
+            window.location.href = "index.html";
+        }
+    </script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDatabase, ref, set, onDisconnect } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQqpGVRQrX4mm-MJKvPNEVhxyVQ-emQ1k",
+            authDomain: "yimcsmr-b8fd2.firebaseapp.com",
+            projectId: "yimcsmr-b8fd2",
+            storageBucket: "yimcsmr-b8fd2.firebaseapp.com",
+            messagingSenderId: "4236095136",
+            appId: "1:4236095136:web:5934e46998a919a04f23c5",
+            measurementId: "G-DLDCTJYEHC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const realtimeDb = getDatabase(app);
+
+        // Function to fetch user name from Firestore using email
+        async function fetchUserName(email) {
+            try {
+                // Reference to the document with the user's email
+                const docRef = doc(db, "users", email);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const userName = docSnap.data().name;
+                    document.getElementById("username").textContent = `@${userName}`;
+                    updateStatus(email, true); // Set user as active
+                } else {
+                    console.log("No such document!");
+                }
+            } catch (error) {
+                console.error("Error fetching document: ", error);
+            }
+        }
+
+        // Function to update user status in Realtime Database
+        function updateStatus(email, isActive) {
+            const userStatusRef = ref(realtimeDb, `status/${email.replace('@', '_').replace('.', '_')}`);
+            set(userStatusRef, {
+                active: isActive
+            });
+        }
+
+        // Get email from local storage and fetch the user's name
+        const userEmail = localStorage.getItem("userEmail");
+        if (userEmail) {
+            console.log("Email found in local storage:", userEmail);
+            fetchUserName(userEmail);
+
+            // Set user as inactive on disconnect
+            const userStatusRef = ref(realtimeDb, `status/${userEmail.replace('@', '_').replace('.', '_')}`);
+            onDisconnect(userStatusRef).set({
+                active: false
+            });
+        } else {
+            console.log("No user email found in local storage.");
+        }
+
+        // Set user as inactive when the window is closed or refreshed
+        window.addEventListener('beforeunload', () => {
+            if (userEmail) {
+                updateStatus(userEmail, false);
+            }
+        });
+    </script>
+</body>
+</html>

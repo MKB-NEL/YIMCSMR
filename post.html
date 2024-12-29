@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST NOTE</title>
+    <link rel="icon" href="yim1.png" type="image/x-icon">
+    <style>
+        @keyframes rotate-gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/736x/0b/49/66/0b4966cf787d89502e3254c2d7ba902b.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, white, lightyellow, gray);
+            background-size: 300% 300%;
+            animation: rotate-gradient 8s infinite linear;
+            z-index: 0;
+        }
+
+        .container {
+            width: 350px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-image: url('https://i.pinimg.com/736x/0b/49/66/0b4966cf787d89502e3254c2d7ba902b.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .header {
+            color: wheat;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .profile span {
+            color: rgb(246, 255, 255);
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .input-area textarea {
+            width: 90%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            resize: none;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            color: #333;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .actions .left {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions .left button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .actions .right button {
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .heading {
+            text-align: center;
+            font-size: 50px;
+            font-weight: bold;
+            color: #007BFF;
+            cursor: pointer;
+            margin-top: 60px;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .heading:hover {
+            color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div class="heading" onclick="window.location.href='notes.html'">POST</div>
+    <div class="container">
+        <div class="header">New note.</div>
+
+        <div class="profile">
+            <img src="https://i.pinimg.com/736x/07/21/5e/07215ecafda468257609aa0a4d816369.jpg" alt="Profile Picture">
+            <span id="username">@Username</span>
+        </div>
+
+        <div class="input-area">
+            <textarea id="noteContent" placeholder="What's in your mind today?"></textarea>
+        </div>
+
+        <div class="actions">
+            <div class="left">
+                <button title="Add Hashtag">#</button>
+            </div>
+            <div class="right">
+                <button id="postButton">Post</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Let's make it better by sharing ideas, thoughts,..
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQqpGVRQrX4mm-MJKvPNEVhxyVQ-emQ1k",
+            authDomain: "yimcsmr-b8fd2.firebaseapp.com",
+            databaseURL: "https://yimcsmr-b8fd2-default-rtdb.firebaseio.com",
+            projectId: "yimcsmr-b8fd2",
+            storageBucket: "yimcsmr-b8fd2.firebasestorage.app",
+            messagingSenderId: "4236095136",
+            appId: "1:4236095136:web:5934e46998a919a04f23c5",
+            measurementId: "G-DLDCTJYEHC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to send username and note content to Firestore
+        async function postNote() {
+            const username = localStorage.getItem('username') || 'DefaultUser';
+            const noteContent = document.getElementById('noteContent').value;
+
+            try {
+                const docRef = await addDoc(collection(db, "post"), {
+                    username: username,
+                    content: noteContent,
+                    timestamp: new Date()
+                });
+                console.log("Document written with ID: ", docRef.id);
+                alert("Your note has been posted!");
+                window.location.href = 'notes.html'; // Redirect to notes.html after alert
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("Error posting your note. Please try again.");
+            }
+        }
+
+        // Event listener for the Post button
+        document.getElementById('postButton').addEventListener('click', postNote);
+
+        // Set the username from local storage
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username') || 'DefaultUser';
+            document.getElementById('username').textContent = `@${username}`;
+        });
+    </script>
+</body>
+</html>

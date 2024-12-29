@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YIMCSMR-Trivia/Quiz</title>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+    <link rel="icon" href="yim1.png" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #d3d3d3, #f8f8f8);
+            color: #333;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px; /* Add padding for mobile */
+        }
+
+        h1 {
+            color: #003366; /* Deep blue color */
+            font-size: 2.5em; /* Adjusted font size for mobile */
+            animation: bounce 1s infinite; /* Animation effect */
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .italic-text {
+            font-style: italic;
+            margin: 5px 0; /* Decreased margin for spacing */
+            font-size: 1em; /* Adjusted font size for mobile */
+            display: flex; /* Use flexbox for alignment */
+            justify-content: space-between; /* Space between text and button */
+            align-items: center; /* Center vertically */
+        }
+
+        .divider {
+            width: 100%; /* Full width for mobile */
+            height: 2px; /* Set height of the line */
+            background-color: gray; /* Gray color for the line */
+            margin: 5px 0; /* Decreased margin for spacing */
+        }
+
+        .question-number {
+            color: black; /* Black color for the text */
+            font-size: 1.5em; /* Increase font size */
+            margin: 5px 0; /* Decreased margin for spacing */
+        }
+
+        .question-text {
+            color: black; /* Black color for the text */
+            font-size: 1.2em; /* Set font size */
+            margin: 10px 0; /* Add some margin for spacing */
+        }
+
+        .option {
+            display: inline-block;
+            background-color: gray; /* Gray background */
+            color: white; /* White text */
+            padding: 15px 30px; /* Padding for the boxes */
+            margin: 5px; /* Margin between boxes */
+            cursor: pointer; /* Pointer cursor on hover */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s; /* Smooth transition */
+            font-size: 1em; /* Adjusted font size for mobile */
+        }
+
+        .option:hover {
+            background-color: lightgreen; /* Green on hover for TRUE */
+        }
+
+        .option.false:hover {
+            background-color: lightcoral; /* Red on hover for FALSE */
+        }
+
+        .scoreboard-button {
+            background-color: blue; /* Blue background for the button */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding for the button */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            text-decoration: none; /* No underline */
+            font-size: 1em; /* Font size */
+            margin-left: 10px; /* Space between text and button */
+        }
+
+        .scoreboard-button:hover {
+            background-color: darkblue; /* Darker blue on hover */
+        }
+
+        /* Make the marks-counter invisible */
+        .marks-counter {
+            display: none;
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 50px;
+            display: flex;
+            justify-content: space-around;
+            width: 95%;
+            padding: 15px;
+            background: rgba(0, 128, 0, 0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .navbar a svg {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 5px;
+        }
+
+        .navbar a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <h1>TRIVIA</h1>
+    <p id="user-email"></p>
+    <p class="italic-text">
+        Play the quiz game and check your rank on the BOARD SCORE.
+        <a href="marks.html" class="scoreboard-button">SCORE BOARD</a>
+    </p>
+    <div class="divider"></div>
+    <div class="marks-counter" id="marks-counter">Marks: 0.0</div>
+    <div class="question-number" id="question-number">Question 1</div>
+    <div class="question-text" id="question-text">The Great Wall of China is visible from space.</div>
+    
+    <div>
+        <div class="option true" onclick="selectOption(this)">TRUE</div>
+        <div class="option false" onclick="selectOption(this)">FALSE</div>
+    </div>
+
+    <div class="navbar">
+        <a href="home.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" />
+            </svg>
+            Home
+        </a>
+        <a href="notes.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 21H15C15.55 21 16 20.55 16 20V7H8V20C8 20.55 8.45 21 9 21ZM10 2H14V4H10V2ZM6 7H18V20C18 21.1 17.1 22 16 22H8C6.9 22 6 21.1 6 20V7Z" />
+            </svg>
+            Notes
+        </a>
+        <a href="view.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4 4H20V20H4V4ZM6 6V18H18V6H6Z" />
+            </svg>
+            View
+        </a>
+        <a href="dashboard.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H13V15H11V17ZM11 13H13V7H11V13Z" />
+            </svg>
+            Dashboard
+        </a>
+        <a href="trivia.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H13V15H11V17ZM11 13H13V7H11V13Z" />
+            </svg>
+            Trivia
+        </a>
+        <a href="chat.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 6H4V18H20V6ZM22 4V20C22 21.1 21.1 22 20 22H4C2.9 22 2 21.1 2 20V4C2 2.9 2.9 2 4 2H20C21.1 2 22 2.9 22 4ZM6 14H18V16H6V14ZM6 10H18V12H6V10ZM6 6H18V8H6V6Z" />
+            </svg>
+            Chat
+        </a>
+    </div>
+
+    <script>
+        // Function to replace '#UserEmail' with the email from local storage
+        function updateUserEmail() {
+            const email = localStorage.getItem('userEmail');
+            if (email) {
+                document.getElementById('user-email').textContent = email;
+            } else {
+                document.getElementById('user-email').textContent = 'Email not found';
+            }
+        }
+
+        const questions = [
+        { question: "The Great Wall of China is visible from space.", answer: "False" },
+            { question: "Lightning never strikes the same place twice.", answer: "False" },
+            { question: "Bananas are berries, but strawberries are not.", answer: "True" },
+            { question: "A day on Venus is longer than a year on Venus.", answer: "True" },
+            { question: "Humans share approximately 60% of their DNA with bananas.", answer: "True" },
+            { question: "Sharks are mammals.", answer: "False" },
+            { question: "The Eiffel Tower can grow taller in the summer.", answer: "True" },
+            { question: "The inventor of the Pringles can is buried in one.", answer: "True" },
+            { question: "An octopus has three hearts and blue blood.", answer: "True" },
+            { question: "Mount Everest is the tallest mountain in the world.", answer: "False" },
+            { question: "The shortest war in history lasted only 38 minutes.", answer: "True" },
+            { question: "The unicorn is the national animal of Scotland.", answer: "True" },
+            { question: "The Amazon rainforest produces 50% of the world’s oxygen.", answer: "False" },
+            { question: "The Earth is closer to the sun in summer.", answer: "False" },
+            { question: "Octopuses can taste with their tentacles.", answer: "True" },
+            { question: "There is no wind on the Moon.", answer: "True" },
+            { question: "The world’s oldest toy is a doll.", answer: "True" },
+            { question: "A cat has nine lives.", answer: "False" },
+            { question: "Seahorses have stomachs for digesting food.", answer: "False" },
+            { question: "The longest recorded flight of a chicken is 13 seconds.", answer: "True" },
+            { question: "A jellyfish is 95% water.", answer: "True" },
+            { question: "Humans glow in the dark.", answer: "True" },
+  { question: "A group of flamingos is called a flamboyance.", answer: "True" },
+  { question: "Honey never spoils.", answer: "True" },
+  { question: "A day on Venus is shorter than a year on Venus.", answer: "False" },
+  { question: "Humans are the only animals that blush.", answer: "True" },
+  { question: "Bananas are berries, but strawberries are not.", answer: "True" },
+  { question: "The human nose can detect over 1 trillion different scents.", answer: "True" },
+  { question: "Octopuses lay 1,000 eggs at a time.", answer: "True" },
+  { question: "Water spirals down a drain in different directions depending on the hemisphere.", answer: "False" },
+  { question: "Goldfish only have a three-second memory.", answer: "False" },
+  { question: "The Great Wall of China is visible from space.", answer: "False" },
+  { question: "A snail can sleep for three years.", answer: "True" },
+  { question: "There are more stars in the universe than grains of sand on Earth.", answer: "True" },
+  { question: "Sloths can hold their breath longer than dolphins.", answer: "True" },
+  { question: "The heart of a blue whale is the size of a small car.", answer: "True" },
+  { question: "Peanuts are not nuts.", answer: "True" },
+  { question: "Humans can’t breathe and swallow at the same time.", answer: "True" },
+  { question: "Cows have best friends.", answer: "True" },
+  { question: "Shaving makes hair grow back thicker.", answer: "False" },
+  { question: "The moon is slowly moving closer to Earth.", answer: "False" },
+  { question: "Koalas have fingerprints similar to humans.", answer: "True" },
+  { question: "Tomatoes were once considered poisonous.", answer: "True" },
+  { question: "Owls can rotate their heads 360 degrees.", answer: "False" },
+  { question: "The Earth’s core is hotter than the surface of the sun.", answer: "True" },
+  { question: "An ostrich’s eye is bigger than its brain.", answer: "True" },
+  { question: "There are more fake flamingos in the world than real ones.", answer: "True" },
+  { question: "A bolt of lightning is five times hotter than the sun.", answer: "True" },
+  { question: "The longest hiccuping spree lasted 68 years.", answer: "True" },
+  { question: "Vikings wore helmets with horns.", answer: "False" },
+  { question: "Pineapples take two years to grow.", answer: "True" },
+  { question: "Polar bear fur is white.", answer: "False" },
+  { question: "Some frogs can survive being frozen solid.", answer: "True" },
+  { question: "The average person spends six months of their life waiting for red lights to turn green.", answer: "True" },
+  { question: "You can hear a lion’s roar from five miles away.", answer: "True" },
+  { question: "Penguins can fly.", answer: "False" },
+  { question: "The first oranges weren’t orange.", answer: "True" },
+  { question: "Elephants can jump.", answer: "False" },
+  { question: "The dot over the letter 'i' is called a tittle.", answer: "True" },
+  { question: "Spiders have six legs.", answer: "False" },
+  { question: "Humans share 98% of their DNA with chimpanzees.", answer: "True" },
+  { question: "The Statue of Liberty was originally gold.", answer: "False" },
+  { question: "Ants never sleep.", answer: "False" },
+  { question: "The unicorn is the national animal of Scotland.", answer: "True" },
+  { question: "Venus is the hottest planet in our solar system.", answer: "True" },
+  { question: "The shortest war in history lasted only 38 minutes.", answer: "True" },
+  { question: "Coca-Cola was originally green.", answer: "False" },
+  { question: "The average human body contains enough bones to make an entire skeleton.", answer: "True" },
+  { question: "Butterflies taste with their feet.", answer: "True" },
+  { question: "Sharks can blink their eyes.", answer: "True" },
+  { question: "The inventor of the light bulb was Nikola Tesla.", answer: "False" },
+  { question: "Camels store water in their humps.", answer: "False" },
+  { question: "Apples float in water because they are 25% air.", answer: "True" },
+  { question: "A crocodile cannot stick its tongue out.", answer: "True" },
+  { question: "The oldest piece of chewing gum is over 9,000 years old.", answer: "True" },
+  { question: "A single strand of spaghetti is called a spaghetto.", answer: "True" },
+  { question: "Bats are blind.", answer: "False" },
+  { question: "The shortest lifespan of an animal is 24 hours.", answer: "True" },
+  { question: "The Amazon rainforest produces 50% of the world’s oxygen.", answer: "False" },
+  { question: "The Earth is closer to the sun in summer.", answer: "False" },
+  { question: "Octopuses can taste with their tentacles.", answer: "True" },
+  { question: "There is no wind on the Moon.", answer: "True" },
+  { question: "The world’s oldest toy is a doll.", answer: "True" },
+  { question: "A cat has nine lives.", answer: "False" },
+  { question: "Seahorses have stomachs for digesting food.", answer: "False" },
+  { question: "The longest recorded flight of a chicken is 13 seconds.", answer: "True" },
+  { question: "A jellyfish is 95% water.", answer: "True" },
+  { question: "Humans glow in the dark.", answer: "True" },
+  { question: "The fingerprints of a koala are indistinguishable from a human's.", answer: "True" },
+  { question: "There are more atoms in a glass of water than glasses of water in all the oceans on Earth.", answer: "True" },
+  { question: "The Great Pyramid of Giza has eight sides, not four.", answer: "True" },
+  { question: "Dolphins can recognize themselves in mirrors.", answer: "True" },
+  { question: "The Moon has earthquakes.", answer: "True" },
+  { question: "A day on Mars is longer than a day on Earth.", answer: "True" },
+  { question: "A group of crows is called a murder.", answer: "True" },
+  { question: "Antarctica is the driest place on Earth.", answer: "True" },
+  { question: "The majority of your brain is fat.", answer: "True" },
+  { question: "Lightning strikes the same place twice.", answer: "True" },
+  { question: "A giraffe’s tongue is blue.", answer: "True" },
+  { question: "Humans have more than five senses.", answer: "True" },
+  { question: "The hottest temperature ever recorded on Earth is over 70°C.", answer: "True" },
+  { question: "Rabbits can see behind themselves without turning their heads.", answer: "True" },
+  { question: "There are more chickens than humans on Earth.", answer: "True" },
+  { question: "The inventor of the telephone, Alexander Graham Bell, refused to have one in his study.", answer: "True" },
+  { question: "The Eiffel Tower can be 15 cm taller during the summer.", answer: "True" },
+  { question: "Bees can recognize human faces.", answer: "True" }
+
+        ];
+
+        let currentQuestionIndex = 0;
+        let marks = 0.0;
+
+        function displayQuestion(index) {
+            document.getElementById('question-number').textContent = `Question ${index + 1}`;
+            document.getElementById('question-text').textContent = questions[index].question;
+        }
+
+        function updateMarks() {
+            document.getElementById('marks-counter').textContent = `Marks: ${marks.toFixed(1)}`;
+            // Save the marks to local storage
+            localStorage.setItem('marks', marks.toString());
+        }
+
+        function updateQuestionIndex() {
+            // Save the current question index to local storage
+            localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+        }
+
+        function selectOption(selected) {
+            // Check if the selected option is correct
+            const isCorrect = (selected.classList.contains('true') && questions[currentQuestionIndex].answer === "True") ||
+                              (selected.classList.contains('false') && questions[currentQuestionIndex].answer === "False");
+
+            if (isCorrect) {
+                marks += 4.7;
+                updateMarks();
+            }
+
+            // Move to the next question
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+                updateQuestionIndex();
+            } else {
+                document.getElementById('question-number').textContent = 'Quiz Completed';
+                document.getElementById('question-text').textContent = '';
+                const options = document.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.style.display = 'none';
+                });
+            }
+        }
+
+        // Call the updateUserEmail and restore marks and question index on page load
+        window.onload = function() {
+            updateUserEmail();
+
+            // Restore the marks from local storage
+            const storedMarks = localStorage.getItem('marks');
+            if (storedMarks) {
+                marks = parseFloat(storedMarks);
+                updateMarks();
+            }
+
+            // Restore the current question index from local storage
+            const storedQuestionIndex = localStorage.getItem('currentQuestionIndex');
+            if (storedQuestionIndex) {
+                currentQuestionIndex = parseInt(storedQuestionIndex, 10);
+            }
+
+            displayQuestion(currentQuestionIndex);
+        }
+    </script>
+    
+    <!-- Module Script -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+        import { getDatabase, ref, update, onDisconnect } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQqpGVRQrX4mm-MJKvPNEVhxyVQ-emQ1k",
+            authDomain: "yimcsmr-b8fd2.firebaseapp.com",
+            databaseURL: "https://yimcsmr-b8fd2-default-rtdb.firebaseio.com",
+            projectId: "yimcsmr-b8fd2",
+            storageBucket: "yimcsmr-b8fd2.firebasestorage.app",
+            messagingSenderId: "4236095136",
+            appId: "1:4236095136:web:5934e46998a919a04f23c5",
+            measurementId: "G-DLDCTJYEHC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Function to update user status in Realtime Database
+        function updateStatus(email, isActive) {
+            const userStatusRef = ref(database, `status/${email.replace('@', '_').replace('.', '_')}`);
+            update(userStatusRef, {
+                active: isActive
+            });
+        }
+
+        // Get email from local storage and set user as active on load
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            console.log("Email found in local storage:", userEmail);
+            
+            // Set user as active on load
+            updateStatus(userEmail, true);
+
+            // Set user as inactive on disconnect
+            const userStatusRef = ref(database, `status/${userEmail.replace('@', '_').replace('.', '_')}`);
+            onDisconnect(userStatusRef).update({
+                active: false
+            });
+        } else {
+            console.log("No user email found in local storage.");
+        }
+
+        // Set user as inactive when the window is closed or refreshed
+        window.addEventListener('beforeunload', () => {
+            if (userEmail) {
+                updateStatus(userEmail, false);
+            }
+        });
+    </script>
+
+    <script>
+        // Send marks to Realtime Database every 5 seconds
+        setInterval(async () => {
+            const email = localStorage.getItem('userEmail');
+            if (email) {
+                const success = await sendMarksToDatabase(email, marks);
+                if (!success) {
+                    alert('Failed to send marks.');
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
