@@ -6,28 +6,4 @@
         <changefreq>daily</changefreq>
         <priority>1.0000</priority>
     </url>
-    <url>
-        <loc>https://mkb-nel.github.io/YIMCSMR/home.html</loc>
-        <lastmod>2024-12-30T05:59:55+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8000</priority>
-    </url>
-    <url>
-        <loc>https://mkb-nel.github.io/YIMCSMR/notes.html</loc>
-        <lastmod>2024-12-30T05:59:55+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8000</priority>
-    </url>
-    <url>
-        <loc>https://mkb-nel.github.io/YIMCSMR/dashboard.html</loc>
-        <lastmod>2024-12-30T05:59:55+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8000</priority>
-    </url>
-    <url>
-        <loc>https://mkb-nel.github.io/YIMCSMR/trivia.html</loc>
-        <lastmod>2024-12-30T05:59:55+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8000</priority>
-    </url>
 </urlset>
