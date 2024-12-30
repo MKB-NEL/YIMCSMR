@@ -33,6 +33,7 @@
       height: 100%;
       flex-direction: column;
       position: relative;
+      padding: 20px;
     }
 
     .header {
@@ -56,8 +57,10 @@
 
     .form-container {
       position: relative;
-      width: 350px;
-      height: 550px; /* Increased height to accommodate new input */
+      width: 100%;
+      max-width: 400px;
+      margin: 0 20px;
+      height: auto;
       overflow: hidden;
       border-radius: 15px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -172,8 +175,7 @@
 
     @media (max-width: 768px) {
       .container {
-        flex-direction: column;
-        width: 90%;
+        padding: 10px;
         height: auto;
       }
 
