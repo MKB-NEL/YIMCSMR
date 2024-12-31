@@ -217,6 +217,19 @@
             // Redirect to index page
             window.location.href = "index.html";
         }
+
+         // Check if the username exists in local storage and redirect if not
+        function checkUsername() {
+            const storedUsername = localStorage.getItem('username');
+            if (!storedUsername) {
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('username').textContent = `@${storedUsername}`;
+            }
+        }
+
+        // Call the checkUsername function on page load
+        document.addEventListener('DOMContentLoaded', checkUsername);
     </script>
 
     <script type="module">
@@ -279,8 +292,10 @@
             onDisconnect(userStatusRef).set({
                 active: false
             });
-        } else {
+                      } else {
             console.log("No user email found in local storage.");
+            // Redirect to index page if no email is found in local storage
+            window.location.href = "index.html";
         }
 
         // Set user as inactive when the window is closed or refreshed
